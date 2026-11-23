@@ -455,6 +455,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         flagSecureReason.attach();
 
         super.onCreate(savedInstanceState);
+        com.igxtul.gram.android.IgxtulGram.init(getApplicationContext(), new com.igxtul.gram.android.AndroidTarget(this));
         if (Build.VERSION.SDK_INT >= 24) {
             AndroidUtilities.isInMultiwindow = isInMultiWindowMode();
         }
@@ -470,6 +471,27 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         frameLayout.setClipToPadding(false);
         frameLayout.setClipChildren(false);
         setContentView(frameLayout);
+        com.igxtul.gram.android.IgxtulGram.setRoot(frameLayout);
+        final android.widget.TextView igxButton = new android.widget.TextView(this);
+        igxButton.setText("iGX");
+        igxButton.setTextColor(android.graphics.Color.WHITE);
+        igxButton.setBackgroundColor(0xCC7B5CFF);
+        igxButton.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12);
+        igxButton.setGravity(android.view.Gravity.CENTER);
+        int igxPad = android.util.TypedValue.applyDimension(android.util.TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()).intValue();
+        igxButton.setPadding(igxPad, igxPad / 2, igxPad, igxPad / 2);
+        android.widget.FrameLayout.LayoutParams igxParams = new android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT, android.widget.FrameLayout.LayoutParams.WRAP_CONTENT);
+        igxParams.gravity = android.view.Gravity.TOP | android.view.Gravity.END;
+        igxParams.topMargin = igxPad * 7;
+        igxParams.rightMargin = igxPad;
+        igxButton.setLayoutParams(igxParams);
+        igxButton.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override public void onClick(android.view.View v) {
+                com.igxtul.gram.android.IgxtulGram.openSettings(LaunchActivity.this);
+            }
+        });
+        frameLayout.addView(igxButton);
         rootAnimatedInsetsListener = new WindowAnimatedInsetsProvider(frameLayout);
         PipCoordinator.getInstance().onActivityCreate(this, createActivityVisibilityController(false));
 
