@@ -478,7 +478,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         igxButton.setBackgroundColor(0xCC7B5CFF);
         igxButton.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12);
         igxButton.setGravity(android.view.Gravity.CENTER);
-        int igxPad = android.util.TypedValue.applyDimension(android.util.TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()).intValue();
+        int igxPad = (int) android.util.TypedValue.applyDimension(android.util.TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
         igxButton.setPadding(igxPad, igxPad / 2, igxPad, igxPad / 2);
         android.widget.FrameLayout.LayoutParams igxParams = new android.widget.FrameLayout.LayoutParams(
                 android.widget.FrameLayout.LayoutParams.WRAP_CONTENT, android.widget.FrameLayout.LayoutParams.WRAP_CONTENT);
