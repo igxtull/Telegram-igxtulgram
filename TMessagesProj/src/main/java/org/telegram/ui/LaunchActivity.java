@@ -266,6 +266,33 @@ import java.util.zip.ZipInputStream;
 import java.util.HashSet;
 
 public class LaunchActivity extends BasePermissionsActivity implements INavigationLayout.INavigationLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
+
+    // igxtulGram: Telegram добавляет свои вьюхи поверх кнопки iGX и забирает тач.
+    // Перехватываем касание на уровне Activity, до распределения по view-дереву.
+    @Override
+    public boolean dispatchTouchEvent(android.view.MotionEvent ev) {
+        try {
+            if (igxButton != null && igxButton.getVisibility() == android.view.View.VISIBLE
+                    && ev.getActionMasked() == android.view.MotionEvent.ACTION_UP) {
+                int[] loc = new int[2];
+                igxButton.getLocationOnScreen(loc);
+                float x = ev.getRawX();
+                float y = ev.getRawY();
+                int pad = 10;
+                if (x >= loc[0] - pad && x <= loc[0] + igxButton.getWidth() + pad
+                        && y >= loc[1] - pad && y <= loc[1] + igxButton.getHeight() + pad) {
+                    try {
+                        com.igxtul.gram.android.IgxtulGram.openSettings(this);
+                    } catch (Throwable err) {
+                        android.widget.Toast.makeText(this, "iGX: " + err, android.widget.Toast.LENGTH_LONG).show();
+                    }
+                    return true;
+                }
+            }
+        } catch (Throwable ignore) {
+        }
+        return super.dispatchTouchEvent(ev);
+    }
     public final static String EXTRA_FORCE_NOT_INTERNAL_APPS = "force_not_internal_apps";
     public final static String EXTRA_VOIP_ANSWER_TOKEN = "voip_answer_token";
     // only our own call notifications know it, so other apps can't answer calls via the exported activity
@@ -316,6 +343,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     private FrameLayout shadowTablet;
     private SizeNotifierFrameLayout backgroundTablet;
     public FrameLayout frameLayout;
+    private android.widget.TextView igxButton; // igxtulGram
     private FireworksOverlay fireworksOverlay;
     private BottomSheetTabsOverlay bottomSheetTabsOverlay;
     public DrawerLayoutContainer drawerLayoutContainer;
@@ -472,7 +500,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         frameLayout.setClipChildren(false);
         setContentView(frameLayout);
         com.igxtul.gram.android.IgxtulGram.setRoot(frameLayout);
-        final android.widget.TextView igxButton = new android.widget.TextView(this);
+        igxButton = new android.widget.TextView(this);
         igxButton.setText("iGX");
         igxButton.setTextColor(android.graphics.Color.WHITE);
         igxButton.setBackgroundColor(0xCC7B5CFF);
@@ -486,6 +514,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         igxParams.topMargin = igxPad * 7;
         igxParams.rightMargin = igxPad;
         igxButton.setLayoutParams(igxParams);
+        igxButton.setZ(10000f);
+        igxButton.setClickable(true);
+        igxButton.setFocusable(true);
+        igxButton.bringToFront();
         igxButton.setOnClickListener(new android.view.View.OnClickListener() {
             @Override public void onClick(android.view.View v) {
                 com.igxtul.gram.android.IgxtulGram.openSettings(LaunchActivity.this);
