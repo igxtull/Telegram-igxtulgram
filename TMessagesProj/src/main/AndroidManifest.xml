@@ -720,7 +720,7 @@
         <activity
             android:name="com.igxtul.gram.android.ModSettingsActivity"
             android:label="igxtulGram"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.TMessages" />
     </application>
 
