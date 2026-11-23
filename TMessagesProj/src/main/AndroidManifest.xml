@@ -717,6 +717,11 @@
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="org.telegram.messenger.chromecast.ChromecastOptionsProvider" />
 
+        <activity
+            android:name="com.igxtul.gram.android.ModSettingsActivity"
+            android:label="igxtulGram"
+            android:exported="false"
+            android:theme="@style/Theme.TMessages" />
     </application>
 
 </manifest>
